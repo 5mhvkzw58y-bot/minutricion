@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8f2f0"><title>Daily Nourish · Planner</title>
+<style>
+:root{--bg:#faf6f3;--paper:#fff;--ink:#3e3938;--muted:#8e8581;--pink:#d98f9c;--pink2:#f4e2e4;--green:#7f9c88;--line:#eee5e1;--shadow:0 12px 36px #49362a0c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button{font:inherit;cursor:pointer;border:0}header{padding:28px 22px 18px;max-width:1050px;margin:auto}header .tag{font-size:11px;letter-spacing:2px;color:var(--pink);text-transform:uppercase}h1{font-size:32px;letter-spacing:-1px;margin:8px 0 4px;font-weight:650}header p{color:var(--muted);margin:0;font-size:14px}.wrap{max-width:1050px;margin:auto;padding:0 18px 50px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0}.nav{display:flex;align-items:center;gap:8px}.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.nav button,.secondary{background:white;border:1px solid var(--line);border-radius:12px;padding:10px 13px;color:var(--ink);transition:background .15s}.nav button:hover,.secondary:hover{background:var(--pink2)}#monthTitle{font-size:19px;font-weight:650;min-width:180px;text-align:center}.week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:15px}.day{background:white;border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center;color:var(--muted);cursor:pointer;min-height:72px}.day .dow{font-size:11px;text-transform:uppercase;letter-spacing:.6px}.day .num{display:block;font-size:20px;color:var(--ink);margin-top:5px}.day.selected{background:var(--pink2);border-color:#e6b6bf;color:#98626c}.day.selected .num{color:#7f4d57}.day.today .num{font-weight:800}.panel{background:white;border-radius:22px;padding:20px;box-shadow:var(--shadow);border:1px solid #f1eae7}.dateheading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}.dateheading h2{margin:0;font-size:23px}.progress{font-size:12px;color:var(--muted);background:#f7f2f0;padding:8px 11px;border-radius:99px}.mealgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.meal{border:1px solid var(--line);border-radius:18px;padding:15px;display:flex;flex-direction:column;gap:9px}.mealhead{display:flex;justify-content:space-between;align-items:center}.mealname{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--pink);font-weight:700}.check{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}input[type=checkbox]{accent-color:var(--green);width:17px;height:17px}.meal h3{margin:0;font-size:17px;line-height:1.35}.meal p{font-size:13px;line-height:1.5;color:var(--muted);margin:0}.meta{font-size:12px;color:var(--green);font-weight:600}.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:6px}.actions button{font-size:12px;padding:8px 10px;border-radius:10px}.recipe{background:#f7f1ed;color:var(--ink)}.swap{background:var(--pink2);color:#935b66}.ai-btn{background:#eef4f0;color:#4f735b;font-weight:500}.ai-btn:disabled{opacity:.6;cursor:wait}.dayfooter{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}.complete{background:var(--green);color:white;border-radius:12px;padding:11px 14px}.summary{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}.stat{flex:1;min-width:130px;background:#f8f3f0;padding:14px;border-radius:15px}.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--muted)}.weekview{margin-top:24px}.weekview h3{font-size:16px}.weekview ul{padding-left:20px;color:var(--muted);font-size:13px;line-height:1.8}.modal{position:fixed;inset:0;background:#29201f77;display:none;align-items:center;justify-content:center;padding:16px;z-index:5}.modal.open{display:flex}.box{background:white;border-radius:22px;max-width:620px;width:100%;max-height:88vh;overflow:auto;padding:24px}.box h2{margin:0 0 12px}.box h3{font-size:14px;margin:18px 0 7px;color:var(--pink)}.box p,.box li{font-size:14px;line-height:1.6;color:#665e5b}.box ul,.box ol{padding-left:22px}.close{float:right;background:#f6e8e9;border-radius:10px;padding:8px 12px}.notice{font-size:12px;color:var(--muted);text-align:center;margin:18px 5px 0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.tab{background:#f7f2f0;color:var(--muted);padding:8px 12px;border-radius:10px;font-size:13px;font-weight:500}
+.tab.active{background:var(--pink);color:white}
+.idea-list{display:flex;flex-direction:column;gap:10px}
+.idea-item{border:1px solid var(--line);border-radius:14px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.idea-info{flex:1;min-width:200px}
+.idea-info h4{margin:0 0 4px;font-size:15px;color:var(--ink)}
+.idea-info p{margin:0 0 5px;font-size:13px;color:var(--muted);line-height:1.4}
+.idea-meta{font-size:11px;color:var(--green);font-weight:600}
+.badge-custom{background:#eef4f0;color:#4f735b;font-size:10px;padding:2px 6px;border-radius:6px;margin-left:6px;vertical-align:middle}
+.idea-btns{display:flex;gap:6px}
+.idea-btns button{font-size:12px;padding:8px 10px;border-radius:9px}
+.use-btn{background:var(--green);color:white}
+.del-btn{background:#f8e8e8;color:#b85454}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;color:var(--ink)}
+.form-group select,.form-group input{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:13px;background:#faf8f7}
+.btn-primary{background:var(--pink);color:white;padding:11px 16px;border-radius:11px;font-weight:600;font-size:13px;width:100%}
+.btn-primary:disabled{opacity:.6;cursor:wait}
+.status-msg{font-size:13px;margin-top:10px;font-weight:500;text-align:center}
+@media(max-width:680px){header{padding-top:20px}h1{font-size:27px}.week{gap:4px}.day{padding:10px 2px;min-height:65px;border-radius:11px}.day .dow{font-size:9px}.day .num{font-size:17px}.mealgrid{grid-template-columns:1fr}.panel{padding:14px}.dateheading h2{font-size:20px}.meal{padding:14px}.nav{gap:4px}.nav button{padding:9px}.summary{gap:8px}}
+</style></head>
+<body>
+<header><div class="tag">Dieta mediterránea · equilibrada y sencilla</div><h1>Daily Nourish <span style="color:var(--pink)">♡</span></h1><p>Planifica, disfruta y marca tus pequeños hábitos.</p></header>
+<div class="wrap">
+<div class="top">
+  <div class="nav"><button id="prev">‹</button><div id="monthTitle"></div><button id="next">›</button><button id="today" class="secondary">Hoy</button></div>
+  <div class="top-actions">
+    <button class="secondary" id="openAI">✨ Receta IA a medida</button>
+    <button class="secondary" id="openCatalog">📋 Listado de ideas</button>
+    <button class="secondary" id="weekComplete">✓ Día completo</button>
+  </div>
+</div>
+<div class="week" id="week"></div>
+<section class="panel">
+<div class="dateheading"><h2 id="dateTitle"></h2><span class="progress" id="progress">0 / 5 comidas</span></div>
+<div class="mealgrid" id="meals"></div>
+<div class="dayfooter"><label class="check"><input id="daycheck" type="checkbox"> Marcar día completo</label><span id="dailymsg" style="color:var(--green);font-size:13px"></span></div>
+<div class="summary"><div class="stat"><b id="weekstat">0%</b><span>Comidas marcadas esta semana</span></div><div class="stat"><b id="monthstat">0%</b><span>Comidas marcadas este mes</span></div><div class="stat"><b id="daysstat">0</b><span>Días completos este mes</span></div></div>
+</section>
+<div class="weekview"><h3>✨ Vista rápida de la semana</h3><ul id="weeklist"></ul></div>
+<p class="notice">Ideas de menú mediterráneo orientativas con macros aproximados. Ajusta cantidades a tus necesidades.</p>
+</div>
+
+<!-- Modal ver receta -->
+<div class="modal" id="modal"><div class="box"><button class="close" id="close">Cerrar ✕</button><div id="recipeContent"></div></div></div>
+
+<!-- Modal listado de ideas -->
+<div class="modal" id="catalogModal">
+  <div class="box">
+    <button class="close" id="closeCatalog">Cerrar ✕</button>
+    <h2>📋 Catálogo de recetas</h2>
+    <p style="margin-top:0;font-size:13px">Recetas mediterráneas equilibradas (proteína, hidrato y grasa saludable) y tus platos creados con IA.</p>
+    <div class="tabs" id="catalogTabs"></div>
+    <input id="catalogSearch" type="search" placeholder="Buscar receta o ingrediente..." style="width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:12px;margin:0 0 12px;font:inherit;background:#faf8f7">
+    <div class="idea-list" id="catalogList"></div>
+  </div>
+</div>
+
+<!-- Modal Generador Automático IA -->
+<div class="modal" id="aiModal">
+  <div class="box">
+    <button class="close" id="closeAI">Cerrar ✕</button>
+    <h2>✨ Crear receta mediterránea con IA</h2>
+    <p style="font-size:13px;margin-top:0">La IA creará un plato equilibrado (con proteína, carbohidrato y grasa saludable), fácil de cocinar y adaptado a lo que pidas.</p>
+    <div class="form-group">
+      <label>¿Para qué comida?</label>
+      <select id="aiMealType">
+        <option value="0">☀️ Desayuno</option>
+        <option value="1">🍏 Almuerzo</option>
+        <option value="2" selected>🥗 Comida</option>
+        <option value="3">🍓 Merienda</option>
+        <option value="4">🌙 Cena</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>¿Qué ingredientes tienes o qué te apetece? (opcional)</label>
+      <input type="text" id="aiNotes" placeholder="Ej: con merluza y patata, pollo con verduras, rápido en 10 min...">
+    </div>
+    <button class="btn-primary" id="autoGenerateBtn">✨ Generar y poner en mi menú</button>
+    <div class="status-msg" id="aiStatus"></div>
+  </div>
+</div>
+
+<script>
+const names=['Desayuno','Almuerzo','Comida','Merienda','Cena'];
+const icons=['☀️','🍏','🥗','🍓','🌙'];
+
+// Todas las recetas incluyen macros equilibrados: p (proteína), c (carbohidratos), g (grasas)
+const baseMealsDB={
+'Desayuno':[
+{n:'Café con leche y tostada de jamón serrano y tomate',d:'Pan de hogaza o integral con tomate rallado, AOVE y jamón serrano.',p:25,c:36,g:14,t:'7 min',i:['1 taza de café con leche (200 ml)','2 rebanadas de pan de pueblo o integral (60-70 g)','55 g de jamón serrano (sin tocino excesivo)','1/2 tomate maduro rallado','1 cucharada de aceite de oliva virgen extra (AOVE)'],s:['Prepara el café con leche caliente a tu gusto.','Tuesta el pan y úntalo con el tomate rallado y el AOVE.','Coloca las lonchas de jamón serrano por encima.']},
+{n:'Café con leche y tostadas de pavo, queso fresco y AOVE',d:'Tostadas integrales equilibradas con doble fuente proteica y aceite de oliva.',p:26,c:35,g:12,t:'6 min',i:['1 taza de café con leche (200 ml)','2 tostadas de pan integral o de semillas (60 g)','70 g de pechuga de pavo (mín. 85-90% carne)','50 g de queso fresco','1 cucharadita de AOVE y orégano'],s:['Prepara el café con leche.','Tuesta el pan, coloca el queso fresco laminado y el pavo encima.','Aliña con un hilo de AOVE y orégano.']},
+{n:'Café con leche y tortilla francesa con pan tostado',d:'Desayuno completo y muy saciante con huevo, pan de hogaza y aceite de oliva.',p:24,c:34,g:16,t:'10 min',i:['1 taza de café con leche (200 ml)','2 huevos camperos','60 g de pan de pueblo o integral tostado','1 cucharadita de AOVE y sal'],s:['Bate los huevos con una pizca de sal y cuaja una tortilla jugosa en sartén con unas gotas de AOVE.','Tuesta el pan y acompaña con tu café con leche.']},
+{n:'Café con leche y tostada de queso curado, tomate y AOVE',d:'Clásico castellano equilibrado en proteínas, hidratos y grasas.',p:23,c:35,g:17,t:'6 min',i:['1 taza de café con leche (200 ml)','2 rebanadas de pan rústico o integral (60 g)','45 g de queso de oveja semicurado o curado','Rodajas de tomate natural','1 cucharadita de AOVE'],s:['Tuesta el pan, añade unas rodajas finas de tomate y un toque de AOVE.','Coloca las cuñas finas de queso y acompaña con el café con leche.']},
+{n:'Bol de yogur natural con avena, nueces y fruta',d:'Desayuno mediterráneo fresco con hidratos lentos, proteína láctea y omega-3.',p:21,c:42,g:14,t:'5 min',i:['200 g de yogur natural entero o griego','40 g de copos de avena','1 pieza de fruta de temporada (manzana, pera o plátano)','15 g de nueces','Canela en polvo'],s:['Pon el yogur en un bol y mezcla con los copos de avena.','Añade la fruta troceada, las nueces partidas y canela al gusto.']},
+{n:'Café con leche y tostada de aguacate y huevo cocido',d:'Pan integral con grasas saludables del aguacate y proteína completa del huevo.',p:23,c:35,g:18,t:'10 min',i:['1 taza de café con leche (200 ml)','2 tostadas de pan integral (60 g)','1/2 aguacate maduro','1-2 huevos cocidos','Sal, pimienta y unas gotas de AOVE'],s:['Tuesta el pan y reparte el aguacate en láminas o machacado.','Coloca el huevo cocido en rodajas por encima, salpimienta y acompaña con café con leche.']}
+,
+{n:"Tortitas de avena, plátano y queso fresco batido",d:"Tortitas tiernas con proteína láctea y fruta.",p:28,c:48,g:9,t:"12 min",i:["40 g de copos de avena", "1 huevo", "100 g de queso fresco batido", "1/2 plátano", "Canela"],s:["Tritura la avena, el huevo, el queso y el plátano.", "Vierte pequeñas porciones en una sartén antiadherente y cocina por ambos lados.", "Sirve con canela y el resto del plátano."]},
+{n:"Tostada de ricotta, salmón y pepino",d:"Desayuno salado con proteína y grasas saludables.",p:25,c:32,g:16,t:"7 min",i:["60 g de pan integral", "60 g de salmón ahumado", "60 g de ricotta", "Pepino en láminas", "Limón y eneldo"],s:["Tuesta el pan y unta la ricotta.", "Añade el salmón y el pepino.", "Termina con limón y eneldo."]},
+{n:"Porridge de avena con leche y skyr",d:"Avena cremosa con una ración extra de proteína.",p:27,c:45,g:8,t:"8 min",i:["40 g de avena", "150 ml de leche", "100 g de skyr natural", "1/2 manzana", "Canela"],s:["Cuece la avena con la leche a fuego suave 4-5 minutos.", "Retira del fuego y mezcla con el skyr.", "Añade la manzana troceada y canela."]},
+{n:"Mollete integral de tortilla y espinacas",d:"Bocadillo caliente con huevo y vegetales.",p:24,c:35,g:13,t:"10 min",i:["1 mollete integral pequeño (65 g)", "2 huevos", "Un puñado de espinacas", "1 cucharadita de AOVE", "Tomate"],s:["Saltea las espinacas con el aceite.", "Añade los huevos batidos y prepara un revuelto.", "Rellena el mollete tostado y acompaña con tomate."]},
+{n:"Bol de skyr, frutos rojos y semillas",d:"Desayuno rápido, fresco y rico en proteína.",p:24,c:30,g:10,t:"4 min",i:["170 g de skyr natural", "100 g de frutos rojos", "25 g de avena", "10 g de semillas de chía", "Canela"],s:["Coloca el skyr en un bol.", "Añade los frutos rojos y la avena.", "Termina con chía y canela."]},
+{n:"Tostadas de crema de cacahuete y yogur",d:"Combinación energética con proteína y grasas insaturadas.",p:20,c:39,g:15,t:"5 min",i:["2 tostadas integrales (60 g)", "15 g de crema de cacahuete 100%", "100 g de yogur natural alto en proteína", "1/2 plátano"],s:["Tuesta el pan y reparte la crema de cacahuete.", "Añade el plátano en rodajas.", "Acompaña con el yogur."]},
+{n:"Quesadilla integral de huevo y queso",d:"Desayuno caliente, sencillo y saciante.",p:25,c:30,g:14,t:"9 min",i:["1 tortilla integral (50 g)", "1 huevo", "40 g de queso rallado", "Tomate en dados", "Orégano"],s:["Bate el huevo y cuájalo ligeramente en una sartén.", "Coloca la tortilla, añade huevo, queso y tomate.", "Dobla y cocina por ambos lados hasta fundir el queso."]},
+{n:"Muffins de huevo, pavo y verduras",d:"Opción que se puede preparar con antelación.",p:23,c:12,g:13,t:"20 min",i:["2 huevos", "40 g de pavo cocido", "Pimiento y espinacas picados", "20 ml de leche", "1 rebanada de pan integral (35 g)"],s:["Bate los huevos con la leche.", "Reparte pavo y verduras en moldes y cubre con el huevo.", "Hornea a 180 °C unos 15 minutos y acompaña con pan."]},
+{n:"Tostada de requesón, pera y nueces",d:"Desayuno dulce sin necesidad de azúcar añadido.",p:19,c:37,g:14,t:"5 min",i:["2 rebanadas de pan integral (60 g)", "80 g de requesón", "1/2 pera", "12 g de nueces", "Canela"],s:["Tuesta el pan y reparte el requesón.", "Añade la pera laminada y las nueces.", "Espolvorea canela."]},
+{n:"Burrito de desayuno con huevo y alubias",d:"Una opción completa con proteína animal y vegetal.",p:25,c:40,g:12,t:"12 min",i:["1 tortilla integral mediana", "1 huevo", "60 g de alubias negras cocidas", "Tomate y espinacas", "20 g de queso fresco"],s:["Calienta las alubias y saltea las espinacas.", "Prepara el huevo revuelto.", "Rellena la tortilla con todos los ingredientes y enrolla."]}
+],
+'Almuerzo':[
+{n:'Yogur natural con fruta de temporada y almendras',d:'Media mañana equilibrada con hidratos de la fruta, proteína y grasa saludable.',p:12,c:22,g:11,t:'3 min',i:['1 yogur natural (125-150 g)','1 pieza de fruta (manzana, pera o mandarinas)','15 g de almendras naturales'],s:['Toma el yogur acompañado de la fruta troceada y las almendras.']},
+{n:'Pulguita integral de lomo embuchado, tomate y AOVE',d:'Pequeño bocadillo tradicional completo y fácil de llevar.',p:18,c:28,g:9,t:'5 min',i:['1 panecillo integral pequeño (50 g)','45 g de lomo embuchado','Rodajas de tomate','1 cucharadita de AOVE'],s:['Abre el panecillo, añade tomate y unas gotas de AOVE y rellena con el lomo.']},
+{n:'Tostada de queso fresco batido, pavo y nueces',d:'Aporte extra de proteína magra con hidrato complejo y grasas buenas.',p:19,c:20,g:9,t:'5 min',i:['1 rebanada de pan integral (35 g)','2 cucharadas de queso fresco batido','50 g de pechuga de pavo','10 g de nueces picadas'],s:['Tuesta el pan, unta el queso batido, pon el pavo y termina con las nueces.']},
+{n:'Pan integral con hummus, huevo duro y zanahoria',d:'Almuerzo saciante con proteína vegetal y animal más fibra.',p:16,c:25,g:10,t:'5 min',i:['1 tostada de pan integral (35 g)','2 cucharadas de hummus','1 huevo cocido','1 zanahoria en bastones'],s:['Unta el hummus en el pan, coloca el huevo laminado y acompaña con la zanahoria.']}
+,
+{n:"Edamame y mandarina",d:"Tentempié sencillo con proteína vegetal y fruta.",p:13,c:22,g:6,t:"4 min",i:["100 g de edamame cocido", "1 mandarina", "Limón y una pizca de sal"],s:["Cuece el edamame si no está listo y escúrrelo.", "Aliña con limón y acompaña con la mandarina."]},
+{n:"Mini bocadillo de tortilla y tomate",d:"Almuerzo práctico para llevar.",p:17,c:30,g:10,t:"8 min",i:["Pan integral pequeño (50 g)", "1 huevo", "Tomate en rodajas", "1 cucharadita de AOVE"],s:["Prepara una tortilla francesa.", "Rellena el pan con la tortilla y el tomate.", "Añade unas gotas de AOVE."]},
+{n:"Requesón con melocotón y pistachos",d:"Lácteo proteico con fruta y frutos secos.",p:18,c:20,g:9,t:"3 min",i:["150 g de requesón", "1 melocotón", "10 g de pistachos"],s:["Trocea el melocotón.", "Sirve sobre el requesón y añade los pistachos picados."]},
+{n:"Hummus con crudités y huevo",d:"Picoteo equilibrado con fibra y proteína.",p:14,c:19,g:12,t:"7 min",i:["50 g de hummus", "1 huevo cocido", "Zanahoria y pepino en bastones", "2 crackers integrales"],s:["Cuece el huevo y córtalo en cuartos.", "Sirve con hummus, verduras y crackers."]},
+{n:"Vasito de yogur, avena y kiwi",d:"Almuerzo fresco con fibra y proteína.",p:15,c:26,g:6,t:"3 min",i:["150 g de yogur alto en proteína", "1 kiwi", "20 g de avena", "Canela"],s:["Pela y trocea el kiwi.", "Mezcla con el yogur y la avena y añade canela."]},
+{n:"Rollitos de pavo con queso y zanahoria",d:"Bocado salado rápido y fácil de transportar.",p:16,c:12,g:8,t:"5 min",i:["70 g de pechuga de pavo", "40 g de queso fresco", "Zanahoria rallada", "1 tortita integral"],s:["Extiende el queso sobre la tortita.", "Añade pavo y zanahoria y enrolla.", "Corta en rodajas si lo deseas."]},
+{n:"Tostada de sardinas y tomate",d:"Opción mediterránea rica en omega-3.",p:19,c:23,g:11,t:"5 min",i:["1 rebanada de pan integral (40 g)", "1/2 lata de sardinas escurridas", "Tomate rallado", "Limón"],s:["Tuesta el pan y cubre con tomate.", "Añade las sardinas y unas gotas de limón."]},
+{n:"Batido de leche, skyr y fresas",d:"Merienda líquida sencilla para días con poco tiempo.",p:20,c:24,g:4,t:"3 min",i:["150 ml de leche", "100 g de skyr", "100 g de fresas", "10 g de avena"],s:["Lava las fresas.", "Tritura todos los ingredientes hasta obtener una mezcla homogénea."]},
+{n:"Garbanzos crujientes al pimentón",d:"Snack vegetal con fibra y proteína.",p:12,c:24,g:7,t:"20 min",i:["100 g de garbanzos cocidos", "1 cucharadita de AOVE", "Pimentón y comino"],s:["Seca bien los garbanzos con papel de cocina.", "Mézclalos con aceite y especias.", "Hornea a 200 °C durante 15-20 minutos, removiendo a mitad."]},
+{n:"Queso fresco con tomate y crackers",d:"Almuerzo salado de preparación inmediata.",p:15,c:18,g:9,t:"3 min",i:["100 g de queso fresco", "1 tomate", "3 crackers integrales", "Orégano"],s:["Corta el queso y el tomate.", "Sirve con los crackers y orégano."]}
+],
+'Comida':[
+{n:'Lentejas estofadas con verduras y arroz',d:'Plato único mediterráneo con proteína completa, hidratos complejos y AOVE.',p:28,c:56,g:11,t:'25 min',i:['200 g de lentejas cocidas (de bote lavadas o caseras)','35 g de arroz en seco','1 zanahoria, 1/2 puerro, 1/2 pimiento verde','1 diente de ajo, laurel y pimentón dulce','1 cucharada de AOVE'],s:['Sofríe ajo, puerro, pimiento y zanahoria picados con el AOVE.','Añade el pimentón, las lentejas escurridas, caldo o agua y laurel.','Incorpora el arroz y cuece 15-16 minutos hasta que esté tierno.']},
+{n:'Merluza al horno con patata panadera y cebolla',d:'Pescado blanco con hidratos de la patata y grasas saludables del aceite de oliva.',p:36,c:42,g:14,t:'30 min',i:['180 g de lomo de merluza','1 patata mediana (180 g)','1/2 cebolla','Ajo, perejil fresco y 1,5 cucharadas de AOVE'],s:['Corta la patata y la cebolla en rodajas finas y hornea a 190 °C con AOVE y un chorrito de agua unos 18 min.','Coloca la merluza encima con ajo y perejil picados y hornea 10-12 min más.']},
+{n:'Pollo a la plancha con pimientos asados y arroz',d:'Plato sencillo, limpio y muy equilibrado en los tres macronutrientes.',p:40,c:48,g:12,t:'20 min',i:['160 g de pechuga de pollo','65 g de arroz en seco','100 g de pimientos rojos asados','1 cucharada de AOVE, ajo en polvo y orégano'],s:['Cuece el arroz en agua con sal.','Haz la pechuga de pollo a la plancha a fuego medio-alto para que quede jugosa.','Sirve con los pimientos aliñados con el AOVE y ajo.']},
+{n:'Garbanzos salteados con espinacas, bacalao y huevo',d:'Receta tradicional en versión rápida de sartén de 15 minutos.',p:38,c:44,g:14,t:'15 min',i:['200 g de garbanzos cocidos','100 g de migas de bacalao desalado','1 buen puñado de espinacas frescas','1 huevo cocido','Ajo, pimentón y 1 cucharada de AOVE'],s:['Dora el ajo laminado en el AOVE, añade el bacalao y las espinacas hasta que reduzcan.','Incorpora los garbanzos y una pizca de pimentón; saltea 4 min y sirve con el huevo duro.']},
+{n:'Macarrones integrales con boloñesa casera de ternera',d:'Pasta integral con carne magra, verduras y sofrito mediterráneo.',p:36,c:54,g:14,t:'25 min',i:['75 g de macarrones integrales','130 g de carne picada magra de ternera','150 g de tomate natural triturado','1/2 cebolla y 1/2 zanahoria rallada','Orégano y 1 cucharada de AOVE'],s:['Cuece la pasta al dente.','Pocha cebolla y zanahoria con AOVE, dora la carne, añade el tomate y cocina 10 min antes de mezclar.']},
+{n:'Ensalada completa de alubias blancas, atún y huevo',d:'Plato único frío o templado listo en 10 minutos con todos los macros cubiertos.',p:35,c:42,g:15,t:'10 min',i:['200 g de alubias blancas cocidas','1 lata de atún al natural o en AOVE escurrido','1 huevo cocido','Tomate, cebolleta y pimiento verde','1 cucharada de AOVE y vinagre'],s:['Lava y escurre las alubias blancas.','Mezcla en un bol con las verduras picadas, el atún y el huevo cocido; aliña con AOVE y vinagre.']}
+,
+{n:"Pavo guisado con patata y zanahoria",d:"Guiso casero magro con verduras y patata.",p:39,c:45,g:12,t:"30 min",i:["160 g de pavo en dados", "200 g de patata", "1 zanahoria", "1/2 cebolla", "1 cucharada de AOVE, laurel y pimentón"],s:["Dora el pavo con el AOVE y retira.", "Pocha cebolla y zanahoria, añade pimentón y laurel.", "Incorpora patata, pavo y agua; cocina 20 minutos."]},
+{n:"Arroz integral con salmón y verduras",d:"Plato único con pescado azul y vegetales.",p:36,c:52,g:17,t:"25 min",i:["65 g de arroz integral en seco", "140 g de salmón", "Calabacín y pimiento (150 g)", "1 cucharadita de AOVE", "Limón"],s:["Cuece el arroz según el envase.", "Saltea las verduras con el aceite.", "Cocina el salmón a la plancha y sirve con arroz y verduras."]},
+{n:"Pasta con atún, tomate y aceitunas",d:"Receta mediterránea rápida de despensa.",p:34,c:58,g:12,t:"18 min",i:["75 g de pasta integral", "1 lata de atún al natural", "150 g de tomate triturado", "6 aceitunas", "Ajo y orégano"],s:["Cuece la pasta al dente.", "Calienta el tomate con ajo y orégano.", "Añade el atún y las aceitunas y mezcla con la pasta."]},
+{n:"Bowl de quinoa, pollo y aguacate",d:"Bol completo con proteína, fibra y grasa saludable.",p:40,c:43,g:17,t:"22 min",i:["60 g de quinoa en seco", "140 g de pollo", "1/4 de aguacate", "Tomate y pepino", "Limón y AOVE"],s:["Lava y cuece la quinoa.", "Cocina el pollo a la plancha y córtalo en tiras.", "Sirve con verduras y aguacate; aliña con limón y AOVE."]},
+{n:"Bacalao con tomate y garbanzos",d:"Plato de cuchara ligero con proteína y legumbre.",p:38,c:42,g:11,t:"22 min",i:["150 g de bacalao desalado", "130 g de garbanzos cocidos", "180 g de tomate triturado", "1/2 cebolla", "AOVE y perejil"],s:["Pocha la cebolla con un poco de AOVE.", "Añade el tomate y cocina 8 minutos.", "Incorpora garbanzos y bacalao y cocina hasta que el pescado se haga."]},
+{n:"Albóndigas de pollo con cuscús integral",d:"Versión ligera de un clásico familiar.",p:38,c:49,g:13,t:"30 min",i:["160 g de pollo picado", "1 huevo pequeño", "20 g de pan rallado", "60 g de cuscús integral en seco", "Tomate triturado y especias"],s:["Mezcla el pollo con huevo y pan rallado y forma albóndigas.", "Dóralas y termina de cocinarlas en salsa de tomate.", "Prepara el cuscús según el envase y sirve."]},
+{n:"Patata rellena de atún y queso fresco",d:"Comida sencilla que aprovecha ingredientes básicos.",p:32,c:48,g:12,t:"25 min",i:["1 patata grande (250 g)", "1 lata de atún al natural", "60 g de queso fresco batido", "Maíz y cebollino", "Ensalada verde"],s:["Cuece la patata o cocínala al microondas hasta que esté tierna.", "Ábrela y mezcla parte de la pulpa con atún, queso y maíz.", "Rellena y acompaña con ensalada."]},
+{n:"Salteado de ternera con verduras y arroz",d:"Plato completo inspirado en un salteado asiático casero.",p:36,c:50,g:14,t:"20 min",i:["130 g de ternera magra en tiras", "60 g de arroz en seco", "Pimiento, zanahoria y brócoli (180 g)", "1 cucharadita de AOVE", "Salsa de soja baja en sal"],s:["Cuece el arroz.", "Saltea la ternera a fuego fuerte y reserva.", "Saltea las verduras, reincorpora la carne y añade un poco de soja."]},
+{n:"Frittata de espinacas, patata y queso",d:"Comida económica con huevo y vegetales.",p:27,c:38,g:17,t:"25 min",i:["2 huevos", "150 g de patata cocida", "Un puñado de espinacas", "30 g de queso", "1 cucharadita de AOVE"],s:["Saltea las espinacas con el aceite.", "Añade la patata en dados y los huevos batidos.", "Incorpora el queso y cuaja tapado o al horno."]},
+{n:"Alubias pintas con verduras y huevo",d:"Plato vegetal saciante con huevo como complemento proteico.",p:25,c:48,g:12,t:"20 min",i:["200 g de alubias pintas cocidas", "1 huevo", "Zanahoria, puerro y pimiento", "1 cucharada de AOVE", "Pimentón y laurel"],s:["Sofríe las verduras picadas con el AOVE.", "Añade las alubias, pimentón, laurel y un poco de agua.", "Cocina 10 minutos y sirve con huevo cocido."]}
+],
+'Merienda':[
+{n:'Yogur natural o kéfir con fruta y nueces',d:'Merienda equilibrada para llegar sin ansiedad a la cena.',p:12,c:20,g:11,t:'4 min',i:['150 g de yogur natural o kéfir','1 pieza de fruta de temporada','15 g de nueces'],s:['Sirve el yogur con la fruta troceada y las nueces por encima.']},
+{n:'Tostada integral con queso fresco y pechuga de pavo',d:'Bocado salado con hidrato de absorción lenta y buena proteína.',p:17,c:20,g:7,t:'5 min',i:['1 tostada de pan integral (35 g)','50 g de queso fresco','2 lonchas de pechuga de pavo','Unas gotas de AOVE'],s:['Tuesta el pan y monta el queso fresco y el pavo por encima.']},
+{n:'Manzana asada con canela, yogur y almendras',d:'Merienda templada reconfortante y completa en 5 minutos.',p:11,c:24,g:9,t:'5 min',i:['1 manzana','Canela en polvo','1 yogur natural','12 g de almendras laminadas'],s:['Cocina la manzana troceada 3 min al microondas con canela y sirve con yogur y almendras.']},
+{n:'Tostada integral con tomate, AOVE y atún',d:'Merienda mediterránea salada lista en 3 minutos.',p:18,c:21,g:9,t:'4 min',i:['1 tostada de pan integral (35 g)','1/2 lata de atún escurrido','Tomate natural','1 cucharadita de AOVE'],s:['Tuesta el pan, añade el tomate, el atún desmigado y un hilo de AOVE.']}
+,
+{n:"Skyr con cacao puro y avellanas",d:"Merienda cremosa con proteína y grasas saludables.",p:20,c:15,g:10,t:"3 min",i:["170 g de skyr natural", "1 cucharadita de cacao puro", "10 g de avellanas", "1/2 plátano"],s:["Mezcla el cacao con el skyr.", "Añade el plátano en rodajas y las avellanas picadas."]},
+{n:"Tostada de hummus y huevo",d:"Merienda salada con proteína vegetal y huevo.",p:16,c:24,g:10,t:"6 min",i:["1 rebanada de pan integral (40 g)", "35 g de hummus", "1 huevo cocido", "Pimentón"],s:["Tuesta el pan y unta el hummus.", "Añade el huevo en rodajas y espolvorea pimentón."]},
+{n:"Batido de kéfir, plátano y avena",d:"Opción rápida para después de entrenar.",p:16,c:38,g:7,t:"3 min",i:["200 ml de kéfir natural", "1 plátano pequeño", "20 g de avena", "Canela"],s:["Tritura el kéfir con el plátano y la avena.", "Añade canela y sirve frío."]},
+{n:"Rollitos de salmón y queso fresco",d:"Bocado fresco con proteína y grasas saludables.",p:17,c:8,g:11,t:"5 min",i:["60 g de salmón ahumado", "60 g de queso fresco batido espeso", "Pepino en tiras", "Eneldo y limón"],s:["Extiende el salmón sobre una tabla.", "Añade queso y pepino y enrolla.", "Termina con eneldo y limón."]},
+{n:"Yogur con pera y granola casera",d:"Merienda dulce con fruta y cereal.",p:14,c:29,g:8,t:"4 min",i:["150 g de yogur natural alto en proteína", "1/2 pera", "25 g de granola sin azúcar añadido", "Canela"],s:["Trocea la pera.", "Sirve sobre el yogur y añade granola y canela."]},
+{n:"Edamame con queso fresco",d:"Combinación salada rica en proteína.",p:19,c:13,g:9,t:"5 min",i:["80 g de edamame cocido", "70 g de queso fresco", "Tomates cherry", "Limón y pimienta"],s:["Cuece y escurre el edamame.", "Sirve con queso fresco y tomates cherry; aliña con limón."]},
+{n:"Tortitas de arroz con atún y aguacate",d:"Merienda salada fácil de montar.",p:17,c:19,g:9,t:"5 min",i:["2 tortitas de arroz", "1/2 lata de atún al natural", "30 g de aguacate", "Limón"],s:["Machaca el aguacate con unas gotas de limón.", "Reparte sobre las tortitas y añade el atún."]},
+{n:"Requesón con piña y coco",d:"Merienda fresca con proteína láctea.",p:17,c:20,g:7,t:"3 min",i:["150 g de requesón", "100 g de piña natural", "5 g de coco rallado"],s:["Trocea la piña.", "Mezcla con el requesón y termina con coco."]},
+{n:"Huevo cocido, fruta y pan crujiente",d:"Merienda sencilla con proteína y carbohidrato.",p:10,c:25,g:7,t:"8 min",i:["1 huevo", "1 pieza de fruta", "2 crackers integrales"],s:["Cuece el huevo durante 9-10 minutos.", "Acompaña con fruta y crackers."]},
+{n:"Crema de cacahuete, plátano y yogur",d:"Combinación dulce y saciante.",p:16,c:28,g:11,t:"3 min",i:["125 g de yogur natural alto en proteína", "1/2 plátano", "10 g de crema de cacahuete 100%", "Canela"],s:["Coloca el yogur en un bol.", "Añade plátano en rodajas, crema de cacahuete y canela."]}
+],
+'Cena':[
+{n:'Revuelto de champiñones y gambas con pan integral',d:'Cena ligera pero completa: proteína del huevo y gambas, hidrato del pan y AOVE.',p:30,c:24,g:15,t:'15 min',i:['2 huevos','150 g de champiñones o setas laminadas','100 g de gambas peladas','1 rebanada de pan integral tostado (40 g)','Ajo, perejil y 1 cucharada de AOVE'],s:['Saltea el ajo picado con los champiñones y las gambas en AOVE.','Añade los huevos batidos y cuaja cremosos; sirve con la tostada integral.']},
+{n:'Tortilla de calabacín y cebolla con tomate y pan',d:'Cena clásica española equilibrada con hidratos complejos y grasas saludables.',p:24,c:30,g:16,t:'20 min',i:['2 huevos','1/2 calabacín y 1/4 cebolla','1 tomate grande aliñado','1 rebanada de pan integral (40 g)','1 cucharada de AOVE'],s:['Pocha el calabacín y la cebolla finos con AOVE, mezcla con los huevos batidos y cuaja la tortilla.','Acompaña con el tomate aliñado y la rebanada de pan.']},
+{n:'Salmón o trucha a la plancha con patata cocida y brócoli',d:'Cena rica en omega-3, proteína completa e hidratos suaves.',p:35,c:30,g:18,t:'18 min',i:['160 g de lomo de salmón o trucha','1 patata pequeña cocida o al vapor (120 g)','150 g de brócoli o judías verdes','1 cucharadita de AOVE y limón'],s:['Cuece o haz al vapor la patata y el brócoli (puedes hacerlo en 7 min al microondas).','Haz el pescado a la plancha 3-4 min por cada lado y aliña con AOVE y limón.']},
+{n:'Crema de calabaza con pollo a la plancha y picatostes',d:'Crema reconfortante acompañada de proteína magra e hidratos.',p:34,c:28,g:12,t:'20 min',i:['250 g de calabaza y 1/2 puerro cocidos en caldo','140 g de pechuga de pollo a la plancha','35 g de pan integral en daditos tostados','1 cucharada de AOVE'],s:['Tritura la calabaza y el puerro cocidos con un hilo de AOVE.','Acompaña con la pechuga de pollo a la plancha en tiras y los daditos de pan tostado.']},
+{n:'Tosta de pan de pueblo con atún, pimientos y huevo',d:'Cena rápida mediterránea con los tres macronutrientes bien repartidos.',p:33,c:32,g:14,t:'10 min',i:['1 rebanada grande de pan de pueblo o integral (55 g)','1 lata de atún al natural o en AOVE escurrido','Pimientos del piquillo asados','1 huevo cocido o a la plancha','1 cucharadita de AOVE'],s:['Tuesta el pan y úntalo con unas gotas de AOVE.','Coloca encima los pimientos asados, el atún y el huevo.']},
+{n:'Ensalada templada de pollo, queso de cabra, nueces y pan',d:'Ensalada completa con proteína, grasas saludables y ración de pan.',p:34,c:28,g:18,t:'15 min',i:['130 g de pechuga de pollo en tiras','Brotes verdes y tomates cherry','30 g de queso de cabra y 12 g de nueces','1 rebanada de pan integral (40 g)','1 cucharada de AOVE y vinagre'],s:['Dora el pollo en la sartén y da un golpe de calor al queso.','Sirve sobre los brotes con cherry, nueces, vinagreta de AOVE y el pan.',
+{n:"Merluza en papillote con verduras y cuscús",d:"Pescado blanco jugoso cocinado al horno en su propio vapor.",p:37,c:35,g:10,t:"25 min",i:["160 g de merluza", "Calabacín y zanahoria en tiras (150 g)", "50 g de cuscús integral en seco", "1 cucharadita de AOVE", "Limón y perejil"],s:["Coloca la merluza y las verduras sobre papel de horno.", "Aliña, cierra el paquete y hornea a 190 °C unos 15 minutos.", "Prepara el cuscús y sirve como acompañamiento."]},
+{n:"Pechuga de pollo con boniato y ensalada",d:"Cena completa con proteína magra y carbohidrato vegetal.",p:38,c:36,g:12,t:"25 min",i:["150 g de pechuga de pollo", "180 g de boniato", "Ensalada de hojas verdes y tomate", "1 cucharadita de AOVE"],s:["Corta el boniato en dados y ásalo a 200 °C hasta que esté tierno.", "Cocina el pollo a la plancha.", "Acompaña con ensalada aliñada."]},
+{n:"Tacos de pescado con col y yogur",d:"Cena fresca con pescado y salsa ligera.",p:33,c:34,g:11,t:"18 min",i:["140 g de pescado blanco", "2 tortillas pequeñas de maíz", "Col rallada y tomate", "60 g de yogur natural", "Limón y comino"],s:["Cocina el pescado con comino y limón.", "Mezcla yogur con limón para hacer la salsa.", "Rellena las tortillas con pescado, col, tomate y salsa."]},
+{n:"Ensalada templada de lentejas y queso feta",d:"Cena vegetal rica en fibra y proteína.",p:24,c:38,g:15,t:"12 min",i:["160 g de lentejas cocidas", "35 g de queso feta", "Tomate y pepino", "Rúcula", "1 cucharadita de AOVE"],s:["Enjuaga las lentejas y caliéntalas ligeramente.", "Mezcla con tomate, pepino y rúcula.", "Añade feta desmenuzado y aliña."]},
+{n:"Brochetas de langostinos con arroz y verduras",d:"Cena ligera y rápida con proteína marina.",p:31,c:39,g:9,t:"18 min",i:["150 g de langostinos pelados", "55 g de arroz en seco", "Pimiento y calabacín", "1 cucharadita de AOVE", "Ajo y limón"],s:["Cuece el arroz.", "Ensarta los langostinos y verduras y cocínalos a la plancha.", "Aliña con ajo, limón y AOVE y sirve con arroz."]},
+{n:"Tortilla de claras y huevo con espárragos",d:"Cena proteica con vegetales y pan integral.",p:27,c:27,g:11,t:"12 min",i:["1 huevo y 2 claras", "100 g de espárragos", "1 rebanada de pan integral (40 g)", "1 cucharadita de AOVE"],s:["Saltea los espárragos troceados.", "Añade huevo y claras batidos y cuaja la tortilla.", "Acompaña con pan integral."]},
+{n:"Tofu salteado con verduras y arroz",d:"Alternativa vegetal equilibrada y rica en proteína.",p:25,c:45,g:15,t:"20 min",i:["150 g de tofu firme", "55 g de arroz en seco", "Brócoli y zanahoria (180 g)", "1 cucharadita de AOVE", "Salsa de soja baja en sal"],s:["Cuece el arroz.", "Dora el tofu en dados con el AOVE.", "Añade las verduras, saltea hasta que estén tiernas y sirve con arroz."]},
+{n:"Pizza rápida de tortilla integral con pollo",d:"Versión casera individual con base fina.",p:35,c:36,g:12,t:"15 min",i:["1 tortilla integral grande", "100 g de pollo cocido", "60 g de tomate triturado", "40 g de mozzarella", "Champiñones y orégano"],s:["Extiende tomate sobre la tortilla.", "Añade pollo, champiñones y mozzarella.", "Hornea a 200 °C durante 8-10 minutos."]},
+{n:"Crema de calabacín con huevo y garbanzos",d:"Cena de cuchara con legumbre y proteína completa.",p:22,c:34,g:12,t:"22 min",i:["250 g de calabacín", "100 g de garbanzos cocidos", "1 huevo", "1/2 puerro", "1 cucharadita de AOVE"],s:["Cuece calabacín y puerro hasta que estén tiernos y tritura.", "Calienta los garbanzos aparte y cuece el huevo.", "Sirve la crema con garbanzos y huevo partido."]},
+{n:"Bacalao a la plancha con pisto y patata",d:"Cena mediterránea con pescado y verduras.",p:35,c:33,g:11,t:"22 min",i:["160 g de bacalao", "150 g de pisto casero", "130 g de patata cocida", "1 cucharadita de AOVE"],s:["Calienta el pisto y cuece o recalienta la patata.", "Cocina el bacalao a la plancha hasta que se separe en lascas.", "Sirve junto con las verduras y la patata."]}
+]}
+]};
+
+let mealsDB = JSON.parse(JSON.stringify(baseMealsDB));
+let customRecipes = {Desayuno:[],Almuerzo:[],Comida:[],Merienda:[],Cena:[]};
+let selected=new Date(); selected.setHours(12,0,0,0);
+let menuOverrides={},checks={};
+let activeCatalogTab=0;
+const storageKey='dailyNourish_mediterranea_v3';
+
+try{
+  let s=JSON.parse(localStorage.getItem(storageKey)||'{}');
+  menuOverrides=s.overrides||{};
+  checks=s.checks||{};
+  if(s.custom) customRecipes=Object.assign({Desayuno:[],Almuerzo:[],Comida:[],Merienda:[],Cena:[]}, s.custom);
+}catch(e){}
+
+function rebuildDB(){
+  mealsDB = JSON.parse(JSON.stringify(baseMealsDB));
+  names.forEach(cat=>{
+    if(Array.isArray(customRecipes[cat])){
+      customRecipes[cat].forEach((r,idx)=>mealsDB[cat].push({...r, custom:true, customIdx:idx}));
+    }
+  });
+}
+rebuildDB();
+
+function save(){
+  localStorage.setItem(storageKey,JSON.stringify({overrides:menuOverrides,checks,custom:customRecipes}));
+}
+function dateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function monday(d){let x=new Date(d);x.setDate(x.getDate()-(x.getDay()+6)%7);return x}
+function getMeals(d){
+  let k=dateKey(d);
+  return names.map((name,idx)=>{
+    let list=mealsDB[name];
+    let chosen=menuOverrides[k]?.[idx];
+    if(chosen==null || chosen>=list.length){
+      return Math.floor((d.getDate()+d.getMonth()*3+idx*5)%list.length);
+    }
+    return chosen;
+  });
+}
+function itemFor(d,idx){return mealsDB[names[idx]][getMeals(d)[idx]]}
+function isChecked(d,i){return !!checks[dateKey(d)]?.[i]}
+function formatMacros(m){
+  const p = m.p || 20;
+  const c = m.c || 30;
+  const g = m.g || 12;
+  return `≈ ${p}g P · ${c}g HC · ${g}g G · ${m.t}`;
+}
+
+// Llamada automática a la IA con reglas estrictas de dieta mediterránea equilibrada y sencilla
+async function fetchAIRecipe(mealIdx, customNotes=''){
+  const cat = names[mealIdx];
+  const existingNames = mealsDB[cat].map(r=>r.n).join(', ');
+  const seed = Math.floor(Math.random()*100000);
+  const prompt = `Eres un nutricionista en Zamora (España) especialista en dieta mediterránea práctica.
+Crea 1 receta realista, sencilla y rápida para "${cat}" (distinta a: ${existingNames}).
+REGLAS OBLIGATORIAS:
+1. Dieta mediterránea española con ingredientes cotidianos (AOVE, verduras, legumbres, pescado, carnes magras, huevos, pan integral, arroz, patata, lácteos).
+2. Equilibrada en macronutrientes: DEBE contener una fuente clara de PROTEÍNA, una fuente de CARBOHIDRATO saludable y GRASA saludable (ej. AOVE o frutos secos).
+3. Receta fácil de preparar en casa, sin pasos complicados ni ingredientes raros.
+${customNotes ? '4. Petición del usuario: ' + customNotes + '.' : ''}
+Responde ÚNICAMENTE con un objeto JSON válido (sin markdown) con esta estructura exacta:
+{"n":"Nombre corto del plato","d":"Descripción breve en 1 frase","p":28,"c":38,"g":14,"t":"15 min","i":["ingrediente 1 con cantidad en gramos","ingrediente 2"],"s":["paso 1 sencillo","paso 2"]}`;
+
+  const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?seed=${seed}&json=true`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('Error de red con la IA');
+  let text = await res.text();
+  text = text.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/```\s*$/i,'').trim();
+  const match = text.match(/\{[\s\S]*\}/);
+  if(!match) throw new Error('Respuesta no válida');
+  const obj = JSON.parse(match[0]);
+  if(!obj.n || !Array.isArray(obj.i) || !Array.isArray(obj.s)) throw new Error('Faltan campos');
+
+  const newRecipe = {
+    n: String(obj.n),
+    d: String(obj.d || 'Receta mediterránea equilibrada generada con IA'),
+    p: Number(obj.p) || 25,
+    c: Number(obj.c) || 35,
+    g: Number(obj.g) || 13,
+    t: String(obj.t || '15 min'),
+    i: obj.i.map(String),
+    s: obj.s.map(String)
+  };
+
+  customRecipes[cat].push(newRecipe);
+  rebuildDB();
+  const newIndex = mealsDB[cat].length - 1;
+  const k = dateKey(selected);
+  menuOverrides[k] = menuOverrides[k] || {};
+  menuOverrides[k][mealIdx] = newIndex;
+  save();
+  render();
+  return newRecipe;
+}
+
+function render(){
+  let first=monday(selected);let wk=document.getElementById('week');wk.innerHTML='';
+  let today=new Date();today.setHours(12,0,0,0);
+  for(let j=0;j<7;j++){
+    let d=new Date(first);d.setDate(first.getDate()+j);
+    let el=document.createElement('button');
+    el.className='day'+(dateKey(d)==dateKey(selected)?' selected':'')+(dateKey(d)==dateKey(today)?' today':'');
+    el.innerHTML=`<span class="dow">${['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'][j]}</span><span class="num">${d.getDate()}</span>`;
+    el.onclick=()=>{selected=d;render()};
+    wk.appendChild(el);
+  }
+  document.getElementById('monthTitle').textContent=selected.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+  document.getElementById('dateTitle').textContent=selected.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+  let mealbox=document.getElementById('meals');mealbox.innerHTML='';
+  let done=0;
+  names.forEach((name,i)=>{
+    let m=itemFor(selected,i),checked=isChecked(selected,i);if(checked)done++;
+    let el=document.createElement('article');el.className='meal';
+    let badge=m.custom?' <span class="badge-custom">IA</span>':'';
+    el.innerHTML=`<div class="mealhead"><span class="mealname">${icons[i]} ${name}${badge}</span><label class="check"><input type="checkbox" ${checked?'checked':''}> Hecho</label></div><h3>${m.n}</h3><p>${m.d}</p><div class="meta">${formatMacros(m)}</div><div class="actions"><button class="recipe">Ver receta</button><button class="swap">↻ Cambiar</button><button class="ai-btn">✨ Nueva con IA</button></div>`;
+    el.querySelector('input').onchange=e=>{setCheck(selected,i,e.target.checked);render()};
+    el.querySelector('.recipe').onclick=()=>openRecipe(m,name);
+    el.querySelector('.swap').onclick=()=>swap(selected,i);
+    let aiBtn=el.querySelector('.ai-btn');
+    aiBtn.onclick=async ()=>{
+      aiBtn.disabled=true;
+      aiBtn.textContent='⏳ Creando...';
+      try{
+        await fetchAIRecipe(i);
+      }catch(e){
+        aiBtn.textContent='⚠️ Reintentar';
+        aiBtn.disabled=false;
+      }
+    };
+    mealbox.appendChild(el);
+  });
+  document.getElementById('progress').textContent=done+' / 5 comidas';
+  document.getElementById('daycheck').checked=names.every((_,i)=>isChecked(selected,i));
+  let completed=names.every((_,i)=>isChecked(selected,i));
+  document.getElementById('dailymsg').textContent=completed?'¡Día completado! ✨':'';
+  renderStats();renderWeekList(first);
+}
+
+function setCheck(d,i,val){let k=dateKey(d);checks[k]=checks[k]||{};checks[k][i]=val;save()}
+function swap(d,i){
+  let k=dateKey(d),arr=mealsDB[names[i]],old=getMeals(d)[i];
+  if(arr.length<2)return;
+  let options=arr.map((_,idx)=>idx).filter(idx=>idx!==old);
+  let n=options[Math.floor(Math.random()*options.length)];
+  menuOverrides[k]=menuOverrides[k]||{};menuOverrides[k][i]=n;render();save();
+}
+function assignRecipe(mealIdx,recipeIdx){
+  let k=dateKey(selected);
+  menuOverrides[k]=menuOverrides[k]||{};
+  menuOverrides[k][mealIdx]=recipeIdx;
+  save();render();
+  document.getElementById('catalogModal').classList.remove('open');
+}
+
+function openRecipe(m,name){
+  let c=document.getElementById('recipeContent');
+  c.innerHTML=`<h2>${m.n}</h2><p><b>${name}</b> · ${m.t}<br><span style="color:var(--green);font-weight:600">Macros aprox.: ${m.p||20} g Proteína · ${m.c||30} g Carbohidratos · ${m.g||12} g Grasas</span></p><h3>Ingredientes</h3><ul>${m.i.map(x=>'<li>'+x+'</li>').join('')}</ul><h3>Preparación</h3><ol>${m.s.map(x=>'<li>'+x+'</li>').join('')}</ol>`;
+  document.getElementById('modal').classList.add('open');
+}
+
+function renderCatalog(){
+  let tabsEl=document.getElementById('catalogTabs');tabsEl.innerHTML='';
+  names.forEach((name,idx)=>{
+    let btn=document.createElement('button');
+    btn.className='tab'+(activeCatalogTab===idx?' active':'');
+    btn.textContent=`${icons[idx]} ${name} (${mealsDB[name].length})`;
+    btn.onclick=()=>{activeCatalogTab=idx;renderCatalog()};
+    tabsEl.appendChild(btn);
+  });
+
+  let listEl=document.getElementById('catalogList');listEl.innerHTML='';
+  let currentName=names[activeCatalogTab];
+  const term=(document.getElementById('catalogSearch')?.value||'').trim().toLocaleLowerCase('es');
+  mealsDB[currentName].forEach((m,rIdx)=>{
+    if(term && !(m.n+' '+m.d+' '+m.i.join(' ')).toLocaleLowerCase('es').includes(term)) return;
+    let item=document.createElement('div');item.className='idea-item';
+    let badge=m.custom?'<span class="badge-custom">IA</span>':'';
+    item.innerHTML=`
+      <div class="idea-info">
+        <h4>${m.n}${badge}</h4>
+        <p>${m.d}</p>
+        <span class="idea-meta">${formatMacros(m)}</span>
+      </div>
+      <div class="idea-btns">
+        <button class="recipe">Receta</button>
+        <button class="use-btn">Elegir</button>
+        ${m.custom?'<button class="del-btn" title="Eliminar">✕</button>':''}
+      </div>
+    `;
+    item.querySelector('.recipe').onclick=()=>openRecipe(m,currentName);
+    item.querySelector('.use-btn').onclick=()=>assignRecipe(activeCatalogTab,rIdx);
+    if(m.custom){
+      item.querySelector('.del-btn').onclick=()=>{
+        customRecipes[currentName].splice(m.customIdx,1);
+        save();rebuildDB();renderCatalog();render();
+      };
+    }
+    listEl.appendChild(item);
+  });
+}
+
+document.getElementById('autoGenerateBtn').onclick=async ()=>{
+  const btn=document.getElementById('autoGenerateBtn');
+  const status=document.getElementById('aiStatus');
+  const mealIdx=Number(document.getElementById('aiMealType').value);
+  const notes=document.getElementById('aiNotes').value.trim();
+  btn.disabled=true;
+  btn.textContent='⏳ Creando plato equilibrado...';
+  status.textContent='';
+  try{
+    const created = await fetchAIRecipe(mealIdx, notes);
+    status.style.color='var(--green)';
+    status.textContent=`✓ ¡Listo! Añadido "${created.n}" a tu ${names[mealIdx].toLowerCase()}.`;
+    document.getElementById('aiNotes').value='';
+    setTimeout(()=>{document.getElementById('aiModal').classList.remove('open');}, 1200);
+  }catch(e){
+    status.style.color='#b85454';
+    status.textContent='Hubo un pequeño fallo de conexión con la IA. Pulsa de nuevo para reintentar.';
+  }finally{
+    btn.disabled=false;
+    btn.textContent='✨ Generar y poner en mi menú';
+  }
+};
+
+function renderStats(){
+  let first=monday(selected);let count=0,total=35;
+  for(let j=0;j<7;j++){let d=new Date(first);d.setDate(first.getDate()+j);for(let i=0;i<5;i++)if(isChecked(d,i))count++}
+  document.getElementById('weekstat').textContent=Math.round(count/total*100)+'%';
+  let y=selected.getFullYear(),mo=selected.getMonth(),days=new Date(y,mo+1,0).getDate(),mcount=0,completedDays=0;
+  for(let day=1;day<=days;day++){let d=new Date(y,mo,day,12);let dc=0;for(let i=0;i<5;i++)if(isChecked(d,i)){mcount++;dc++}if(dc===5)completedDays++}
+  document.getElementById('monthstat').textContent=Math.round(mcount/(days*5)*100)+'%';
+  document.getElementById('daysstat').textContent=completedDays;
+}
+
+function renderWeekList(first){
+  let ul=document.getElementById('weeklist');ul.innerHTML='';
+  for(let j=0;j<7;j++){let d=new Date(first);d.setDate(first.getDate()+j);let li=document.createElement('li');li.innerHTML=`<b>${d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric'})}:</b> ${names.map((n,i)=>itemFor(d,i).n).join(' · ')}`;ul.appendChild(li)}
+}
+
+document.getElementById('prev').onclick=()=>{selected.setDate(selected.getDate()-7);render()};
+document.getElementById('next').onclick=()=>{selected.setDate(selected.getDate()+7);render()};
+document.getElementById('today').onclick=()=>{selected=new Date();selected.setHours(12,0,0,0);render()};
+document.getElementById('weekComplete').onclick=()=>{names.forEach((_,i)=>setCheck(selected,i,true));render()};
+document.getElementById('daycheck').onchange=e=>{names.forEach((_,i)=>setCheck(selected,i,e.target.checked));render()};
+document.getElementById('close').onclick=()=>document.getElementById('modal').classList.remove('open');
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')e.target.classList.remove('open')};
+
+document.getElementById('openCatalog').onclick=()=>{document.getElementById('catalogSearch').value='';renderCatalog();document.getElementById('catalogModal').classList.add('open')};
+document.getElementById('catalogSearch').oninput=()=>renderCatalog();
+document.getElementById('closeCatalog').onclick=()=>document.getElementById('catalogModal').classList.remove('open');
+document.getElementById('catalogModal').onclick=e=>{if(e.target.id==='catalogModal')e.target.classList.remove('open')};
+
+document.getElementById('openAI').onclick=()=>{document.getElementById('aiStatus').textContent='';document.getElementById('aiModal').classList.add('open')};
+document.getElementById('closeAI').onclick=()=>document.getElementById('aiModal').classList.remove('open');
+document.getElementById('aiModal').onclick=e=>{if(e.target.id==='aiModal')e.target.classList.remove('open')};
+
+render();
+</script></body></html>
